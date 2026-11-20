@@ -4,7 +4,7 @@ import User from '../models/User.js';
 import { dbStore } from '../config/dbStore.js';
 
 export const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET || 'codealpha_secret_jwt_key_2026', {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '30d',
   });
 };
@@ -20,7 +20,7 @@ export const protect = async (req, res, next) => {
       token = req.headers.authorization.split(' ')[1];
       const decoded = jwt.verify(
         token,
-        process.env.JWT_SECRET || 'codealpha_secret_jwt_key_2026'
+        process.env.JWT_SECRET
       );
 
       if (mongoose.connection.readyState === 1) {

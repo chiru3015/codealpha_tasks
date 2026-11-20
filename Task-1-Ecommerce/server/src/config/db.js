@@ -1,11 +1,14 @@
 import dns from 'dns';
 import mongoose from 'mongoose';
 
-// Ensure reliable DNS resolution for MongoDB Atlas SRV records on Windows/local networks
-try {
-  dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
-} catch (dnsErr) {
-  // If setting custom DNS fails, continue with system DNS
+// Use custom DNS only on Windows local development.
+// Linux hosting platforms such as Render use their default DNS.
+if (process.platform === 'win32') {
+  try {
+    dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
+  } catch (dnsErr) {
+    // Continue with system DNS if custom DNS configuration fails.
+  }
 }
 
 /**
