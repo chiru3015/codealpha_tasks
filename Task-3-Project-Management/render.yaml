@@ -4,6 +4,7 @@
 services:
   - type: web
     name: novatask
+    rootDir: Task-3-Project-Management
     env: node
     plan: free
     region: oregon # Select the region closest to your MongoDB Atlas cluster (e.g., oregon, frankfurt, singapore)

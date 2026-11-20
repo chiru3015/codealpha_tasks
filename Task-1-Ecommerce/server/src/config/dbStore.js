@@ -1,7 +1,6 @@
 import bcrypt from 'bcryptjs';
 
-// Realistic In-Memory Database Store used when MongoDB Atlas connection is awaiting credentials
-// This enables full end-to-end testing of real password hashing, JWTs, orders, stock decrements, and RBAC!
+// In-memory sample data used when the demo fallback is enabled.
 
 class DBStore {
   constructor() {
@@ -12,7 +11,7 @@ class DBStore {
   }
 
   async init() {
-    // Hash default admin and customer passwords using real bcrypt
+    // Hash the sample admin and customer passwords.
     const adminPasswordHash = await bcrypt.hash('admin123', 10);
     const customerPasswordHash = await bcrypt.hash('customer123', 10);
 

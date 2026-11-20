@@ -1,205 +1,135 @@
-# 📌 NovaTask — Collaborative Project Management Tool
+# NovaTask — Project Management Tool
 
-> **CodeAlpha Full Stack Development Internship — Project 2 (Task 3)**
+**CodeAlpha Full Stack Development Internship — Task 3**
 
-NovaTask is a production-grade, collaborative project management and real-time Kanban board application inspired by **Linear**, **Asana**, and **Trello**. Built with the modern MERN stack and Socket.io, it delivers real MongoDB Atlas cloud persistence, JWT authentication with role-based access control, interactive drag-and-drop workflow columns, live discussion threads, activity audit logs, and instant WebSocket updates across team members.
+NovaTask is a project management app for organising projects and team tasks. A user can create a project, add members, assign tasks, and track progress on a Kanban board. Comments and activity updates help team members follow the work.
 
----
+**Live application:** https://novatask-f7f5.onrender.com/login
 
-## ✨ Core Features by Development Phase
+## Features
 
-| Phase | Milestone | Capabilities Delivered |
-|:---|:---|:---|
-| **Phase 1** | **Foundation & Auth** | Node.js + Express REST API on port `5002`, React 19 + Vite + Tailwind CSS v4 on port `3001`, MongoDB Atlas cloud connection (`readyState = 1`), JWT Bearer tokens, bcryptjs password hashing, live status indicator badges in navbar. |
-| **Phase 2** | **Project Lifecycle & Access** | Create, edit, and delete projects; customizable accent color palettes; target due dates; user search; project member invitations with role-based permissions (`owner`, `admin`, `member`, `viewer`). |
-| **Phase 3** | **Task Management (CRUD)** | Create, edit, and delete tasks; multi-assignee team member assignment; 4-tier priorities (`Low`, `Medium`, `High`, `Urgent`); deadlines; tagging support. |
-| **Phase 4** | **Interactive Kanban Board** | 4-column agile board (`To Do`, `In Progress`, `In Review`, `Done`) powered by `@hello-pangea/dnd` with smooth drag-and-drop transitions, column task counters, and optimistic updates. |
-| **Phase 5** | **Discussion & Activity Trail** | Nested task comment threads with author badges and relative timestamps; automated audit logs tracking status transitions and member changes. |
-| **Phase 6** | **Real-Time Sync (Socket.io)** | Dedicated project WebSocket rooms (`join:project`, `leave:project`); instantaneous task creation, drag moves, deletions, and comments broadcast across all open collaborator tabs. |
-| **Phase 7** | **Search, Filters & Analytics** | Real-time title/description/tag search; priority and assignee dropdown filters; overdue task indicator with animated alerts; dynamic project progress bar. |
+- User registration and login
+- Project creation, editing, and deletion
+- Project members with owner, admin, member, and viewer roles
+- Task creation, editing, deletion, and assignment
+- Kanban board with To Do, In Progress, In Review, and Done columns
+- Drag-and-drop task movement and saved task order
+- Task comments and activity history
+- Search and filters for tasks
+- Live updates between users through Socket.io
+- Access checks for project and task actions
 
----
+## Technology
 
-## 🛠️ Technology Stack
+| Part | Tools |
+|---|---|
+| Frontend | React 19, Vite, Tailwind CSS, React Router |
+| Backend | Node.js, Express |
+| Database | MongoDB Atlas and Mongoose |
+| Live updates | Socket.io |
+| Authentication | JWT and bcryptjs |
 
-| Layer | Technologies |
-|:---|:---|
-| **Frontend** | React 19, Vite v8, Tailwind CSS v4, Lucide React, React Router v7, `@hello-pangea/dnd`, Axios, Socket.io Client |
-| **Backend** | Node.js, Express.js (REST API, CORS), Socket.io v4 |
-| **Database** | MongoDB Atlas (Mongoose v8 ODM) — **Real cloud persistence** |
-| **Authentication** | JSON Web Tokens (JWT) + bcryptjs password hashing |
-| **Real-Time Engine**| WebSockets via Socket.io |
-
----
-
-## 📁 Project Architecture
+## Project folders
 
 ```text
-02-project-management-tool/
-├── client/                         # React Frontend (Vite + Tailwind CSS v4)
+Task-3-Project-Management/
+├── client/
+│   └── src/
+│       ├── components/
+│       ├── context/
+│       ├── pages/
+│       └── services/
+├── server/
 │   ├── src/
-│   │   ├── components/             # Navbar, KanbanBoard, CreateTaskModal, TaskDetailModal
-│   │   ├── context/                # AuthContext (JWT & session state)
-│   │   ├── pages/                  # LoginPage, RegisterPage, DashboardPage, ProjectDetailPage
-│   │   ├── services/               # api.js (Axios + JWT interceptor), socket.js (Socket.io client)
-│   │   ├── App.jsx                 # Route definitions & protected routes
-│   │   ├── index.css               # Tailwind CSS v4 setup & custom scrollbars
-│   │   └── main.jsx
-│   ├── vite.config.js              # Proxy :3001 -> :5002 for /api and /socket.io
-│   └── package.json
-│
-├── server/                         # Express.js REST API & WebSocket Server
-│   ├── src/
-│   │   ├── config/                 # db.js (Atlas connection with DNS fallback & URI normalizer)
-│   │   ├── middleware/             # auth.js (ensureDB, protect, admin)
-│   │   ├── models/                 # User.js, Project.js, Task.js (Mongoose Schemas)
-│   │   ├── routes/                 # authRoutes.js, projectRoutes.js, taskRoutes.js
-│   │   ├── socket/                 # socketHandlers.js (room join/leave)
-│   │   ├── seed.js                 # Idempotent demo data seeder
-│   │   └── server.js               # HTTP + Socket.io app entrypoint
-│   ├── .env.example                # Safe environment variable template
-│   ├── .gitignore
-│   └── package.json
-│
-├── .gitattributes
-├── .gitignore
+│   │   ├── config/
+│   │   ├── middleware/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   └── socket/
+│   └── tests/
+├── docs/
+│   └── DEPLOYMENT.md
+├── render.yaml
 └── README.md
 ```
 
----
+## Run locally
 
-## 🔑 Demo Accounts (Pre-configured in MongoDB Atlas)
+You need Node.js 22 or later and npm.
 
-| Role | Email | Password | Access Level |
-|:---|:---|:---|:---|
-| **Project Lead** | `lead@codealpha.com` | `lead123` | Admin & Project Owner; can invite/remove members and delete projects |
-| **Developer** | `dev@codealpha.com` | `dev123` | Member; can create, drag, and update tasks, post comments |
-
-*(Clickable 1-click quick-fill buttons are provided on the login page)*
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- **Node.js** v18 or higher (v25+ supported)
-- **npm** v9 or higher
-- A **MongoDB Atlas** database cluster (free M0 tier is sufficient)
-
----
-
-### 1. Backend Setup
+### 1. Backend
 
 ```bash
-cd server
-cp .env.example .env
+cd Task-3-Project-Management/server
+npm install
 ```
 
-Open `server/.env` and configure your credentials:
+Create `server/.env` and add your own values:
 
 ```env
 PORT=5002
-MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/pm_tool?retryWrites=true&w=majority
-JWT_SECRET=your_jwt_secret_key_here
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=replace_with_a_long_random_secret
 NODE_ENV=development
 CLIENT_URL=http://localhost:3001
 ```
 
-Install dependencies and start the backend:
+Start the backend:
 
 ```bash
+npm run dev
+```
+
+The API runs on `http://localhost:5002`.
+
+### 2. Frontend
+
+Open another terminal:
+
+```bash
+cd Task-3-Project-Management/client
 npm install
-npm run seed       # Seeds initial demo project, users, and tasks into Atlas
-npm start          # Runs backend on port 5002
+npm run dev
 ```
 
----
+Open `http://localhost:3001`.
 
-### 2. Frontend Setup
+## Demo accounts
 
-In a new terminal:
+The seed script creates these accounts if they do not already exist:
+
+| Role | Email | Password |
+|---|---|---|
+| Project lead | `lead@codealpha.com` | `lead123` |
+| Developer | `dev@codealpha.com` | `dev123` |
+
+These are sample credentials for testing. Change them before using the application with a database that contains real user data.
+
+To add the sample project and tasks, run this from the `server` folder:
 
 ```bash
-cd client
-npm install
-npm run dev        # Runs Vite dev server on http://localhost:3001
+npm run seed
 ```
 
-Open **`http://localhost:3001`** in your browser.
+## Main API routes
 
----
+| Area | Routes |
+|---|---|
+| Authentication | `/api/auth/register`, `/api/auth/login`, `/api/auth/me` |
+| Projects | `/api/projects`, `/api/projects/:id`, `/api/projects/:id/members` |
+| Tasks | `/api/tasks`, `/api/tasks/:id`, `/api/tasks/:id/comments` |
+| Health | `/api/health` |
 
-### 3. Production Build & Deployment
+The application also uses Socket.io events to share task creation, updates, deletions, and comments with other connected project members.
 
-To verify compilation and generate optimized assets:
+## Tests and deployment
+
+Run the backend tests from the server folder:
 
 ```bash
-cd client
-npm run build      # Outputs production bundles to client/dist/
+npm test
 ```
 
-NovaTask is configured for unified, single-service production deployment on **Render** with **Node.js 22.x** and **MongoDB Atlas**.
-Detailed step-by-step setup, database user scoping, IP allowlist guidelines, and troubleshooting are available in:
-👉 [**Production Deployment Guide (docs/DEPLOYMENT.md)**](file:///E:/CodeAlpha/02-project-management-tool/docs/DEPLOYMENT.md)
-
-- **Render Blueprint**: [`render.yaml`](file:///E:/CodeAlpha/02-project-management-tool/render.yaml)
-- **Architecture**: Single Render Web Service serving React static bundle, Express REST API, and Socket.io from the exact same origin.
-- **Node Engine**: Node.js `>=22.0.0`
-
----
-
-## 📡 REST API Reference
-
-### Health & Database
-- `GET /api/health` — Returns server uptime and MongoDB Atlas `readyState = 1` connection status.
-
-### Authentication (`/api/auth`)
-- `POST /api/auth/register` — Register a new account (`name`, `email`, `password`).
-- `POST /api/auth/login` — Sign in and receive a 30-day JWT token.
-- `GET /api/auth/me` — Retrieve current authenticated profile.
-- `GET /api/auth/users?keyword=...` — Search registered workspace users to invite to projects.
-
-### Projects (`/api/projects`)
-- `GET /api/projects` — List all projects where user is owner or member.
-- `POST /api/projects` — Create project (`name`, `description`, `color`, `dueDate`).
-- `GET /api/projects/:id` — Retrieve detailed project info (access-controlled).
-- `PUT /api/projects/:id` — Update project metadata or status (admin/owner only).
-- `DELETE /api/projects/:id` — Delete project and cascade-delete its tasks (owner only).
-- `POST /api/projects/:id/members` — Add a member with role (`admin`, `member`, `viewer`).
-- `DELETE /api/projects/:id/members/:userId` — Remove a member from the project.
-
-### Tasks (`/api/tasks`)
-- `GET /api/tasks?project=:id` — List project tasks (supports `?priority=`, `?status=`, `?assignee=`).
-- `POST /api/tasks` — Create task (`title`, `description`, `priority`, `status`, `dueDate`, `tags`, `assignees`).
-- `GET /api/tasks/:id` — Get full task with comments and activity timeline.
-- `PUT /api/tasks/:id` — Update task details, status, or order (emits Socket.io event).
-- `DELETE /api/tasks/:id` — Delete task (emits Socket.io event).
-- `POST /api/tasks/:id/comments` — Post a discussion comment (emits Socket.io event).
-
----
-
-## ⚡ WebSocket Events (`socket.io`)
-
-| Event Name | Direction | Payload | Description |
-|:---|:---:|:---|:---|
-| `join:project` | Client → Server | `projectId` | Joins a project room for isolated real-time events |
-| `leave:project` | Client → Server | `projectId` | Leaves project room on component unmount |
-| `task:created` | Server → Client | `Task` | Broadcasts newly added task to all open board tabs |
-| `task:updated` | Server → Client | `Task` | Broadcasts status transitions (drag-and-drop) or content edits |
-| `task:deleted` | Server → Client | `{ taskId }` | Broadcasts task deletion |
-| `task:comment` | Server → Client | `{ taskId, task }` | Broadcasts new discussion comments |
-
----
-
-## 🔐 Security & Integrity
-
-- **Strict Database Guard:** When MongoDB Atlas is unavailable, requests return **HTTP 503 (Database Unavailable)**. No fake in-memory storage is used for production data.
-- **Git Safety:** `server/.env` is strictly gitignored. Only safe `.env.example` templates are tracked.
-- **Access Control:** Middleware verifies project ownership or membership before allowing reads or mutations.
-
----
-
-## 👨‍💻 Author
+For deployment notes, see [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). The Render configuration is in [render.yaml](render.yaml).
 
 **CodeAlpha Full Stack Development Internship — November 2026**

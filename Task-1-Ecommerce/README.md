@@ -1,275 +1,124 @@
-# 🛒 NovaCart — Full Stack E-Commerce Platform
+# NovaCart — E-commerce Store
 
-> **CodeAlpha Full Stack Development Internship — Project 1**
+**CodeAlpha Full Stack Development Internship — Task 1**
 
-NovaCart is a production-quality, full-stack e-commerce web application built with the MERN stack. It features real MongoDB Atlas cloud persistence, role-based JWT authentication, an interactive product catalog, a shopping cart, full order processing with live inventory management, and an administrative control panel.
+NovaCart is a full-stack online store built with React and Node.js. Customers can browse the product catalogue, search and filter products, manage a cart, and use the checkout page. The admin area provides product and order management.
 
----
+## Features
 
-## ✨ Features
+- Customer registration and login
+- Product catalogue with search and category filters
+- Product details and stock information
+- Shopping cart with quantity controls
+- Checkout form with Card, UPI, and Cash on Delivery options
+- Customer order history
+- Admin dashboard for product and order management
+- Protected routes and role-based access
+- Password hashing with bcryptjs and JWT-based authentication
 
-| Area | Features |
-|:---|:---|
-| **Authentication** | JWT Bearer tokens, bcryptjs password hashing, protected & admin-only routes |
-| **Product Catalog** | Keyword search, category filters, price/rating sorting, featured products, stock indicators |
-| **Shopping Cart** | Persistent cart (localStorage), quantity controls, automatic subtotal, free-shipping threshold |
-| **Checkout** | Delivery address form, payment method selector (Card / UPI / Cash on Delivery), order summary |
-| **Order Management** | Customer order history, order detail view, real-time status badges (Processing / Shipped / Delivered) |
-| **Admin Dashboard** | Revenue, order count, product count & user count metrics; order status updater; full product CRUD |
-| **Database** | MongoDB Atlas cloud persistence — users, products, orders and inventory survive server restarts |
-| **Security** | No credential exposure in source code; `.env` excluded from Git; strict 503 when DB is unavailable |
+The checkout page is a demonstration flow. It does not connect to a payment gateway or charge a card/UPI account.
 
----
+## Technology
 
-## 🛠️ Technology Stack
+| Part | Tools |
+|---|---|
+| Frontend | React 19, Vite, Tailwind CSS, React Router, Axios |
+| Backend | Node.js, Express |
+| Database | MongoDB with Mongoose |
+| Authentication | JWT and bcryptjs |
 
-| Layer | Technology |
-|:---|:---|
-| **Frontend** | React 19, Vite, Tailwind CSS v4, Lucide React, React Router v7, Axios |
-| **Backend** | Node.js, Express.js (REST API, CORS) |
-| **Database** | MongoDB Atlas (Mongoose ODM v8) |
-| **Authentication** | JSON Web Tokens (JWT) + bcryptjs |
-| **Build Tool** | Vite v8 |
-
----
-
-## 📁 Project Structure
+## Project folders
 
 ```text
-01-ecommerce-store/
-├── client/                         # React Frontend (Vite + Tailwind CSS)
+Task-1-Ecommerce/
+├── client/
 │   ├── src/
-│   │   ├── components/             # Navbar, Footer, ProductCard
-│   │   ├── context/                # AuthContext, CartContext
-│   │   ├── pages/                  # Home, Products, ProductDetail, Cart,
-│   │   │                           # Checkout, Orders, Login, Register, Admin
-│   │   ├── services/api.js         # Axios client with JWT interceptor
-│   │   ├── App.jsx                 # Route definitions
-│   │   └── main.jsx
-│   ├── vite.config.js              # API proxy :3000 → :5000, Tailwind plugin
+│   │   ├── components/
+│   │   ├── context/
+│   │   ├── pages/
+│   │   └── services/
 │   └── package.json
-│
-├── server/                         # Express.js REST API
-│   ├── src/
-│   │   ├── config/
-│   │   │   ├── db.js               # MongoDB Atlas connection with URI normalizer
-│   │   │   └── dbStore.js          # In-memory fallback (disabled by default)
-│   │   ├── middleware/auth.js      # protect & admin JWT middlewares
-│   │   ├── models/                 # User, Product, Order (Mongoose schemas)
-│   │   ├── routes/                 # /api/auth, /api/products, /api/orders
-│   │   ├── seed.js                 # Idempotent seed script
-│   │   └── server.js               # Express app entrypoint
-│   ├── .env.example                # Safe environment variable template
-│   ├── .gitignore
-│   └── package.json
-│
-├── .gitattributes
-├── .gitignore
-└── README.md
+└── server/
+    ├── src/
+    │   ├── config/
+    │   ├── middleware/
+    │   ├── models/
+    │   └── routes/
+    └── package.json
 ```
 
----
+## Run locally
 
-## ⚙️ Installation & Setup
+Make sure Node.js and npm are installed.
 
-### Prerequisites
+### 1. Backend
 
-- **Node.js** v18 or higher
-- **npm** v9 or higher
-- A **MongoDB Atlas** account with a cluster (free M0 tier is sufficient)
-
----
-
-### 1. Clone the Repository
+Open a terminal in the repository folder and run:
 
 ```bash
-git clone https://github.com/<your-username>/novacart-ecommerce.git
-cd novacart-ecommerce
+cd Task-1-Ecommerce/server
+npm install
 ```
 
----
-
-### 2. Configure the Backend Environment
-
-```bash
-cd server
-cp .env.example .env
-```
-
-Open `server/.env` and fill in your values:
+Create a `.env` file in the `server` folder. Add the port and your database settings:
 
 ```env
 PORT=5000
-MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/<dbname>?retryWrites=true&w=majority
-JWT_SECRET=your_strong_random_jwt_secret_here
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=replace_with_a_long_random_secret
 NODE_ENV=development
+ENABLE_IN_MEMORY_FALLBACK=true
 ```
 
-> **Important:** Never commit `server/.env`. It is listed in `.gitignore`.
+For the sample-data demo used in this submission, `ENABLE_IN_MEMORY_FALLBACK=true` allows the app to use its built-in sample users, products, and orders when MongoDB is unavailable. This data is kept in server memory, so changes are temporary and reset when the server restarts.
 
-#### How to get your MongoDB Atlas URI
+To use MongoDB instead, configure a valid `MONGODB_URI` and set `ENABLE_IN_MEMORY_FALLBACK=false`. Never put real credentials in the repository.
 
-1. Log in to [MongoDB Atlas](https://cloud.mongodb.com)
-2. Go to **Database** → **Connect** → **Connect your application**
-3. Select **Node.js / Mongoose**, copy the connection string
-4. Replace `<username>` and `<password>` with your Atlas database user credentials
-5. Replace `<dbname>` with a name such as `novacart`
-
----
-
-### 3. Install & Start the Backend
+Start the backend:
 
 ```bash
-# From the server/ directory
+npm run dev
+```
+
+The API runs on `http://localhost:5000`.
+
+### 2. Frontend
+
+Open another terminal:
+
+```bash
+cd Task-1-Ecommerce/client
 npm install
-npm run dev        # Development (nodemon, auto-reload)
-# or
-npm start          # Production
+npm run dev
 ```
 
-The API will run at **http://localhost:5000**. You will see:
+Open the local address printed by Vite (the project is configured to use port `3000`).
 
-```
-✅ MongoDB Atlas Connected Successfully!
-   Cluster Host: <your-cluster>.mongodb.net
-   Database: novacart
-   Connection State: readyState = 1 (Connected)
-🚀 Server running on port 5000 in development mode
-```
+## Demo accounts
 
----
+When the in-memory demo mode is enabled, the sample accounts are:
 
-### 4. Seed Demo Data
+| Role | Email | Password |
+|---|---|---|
+| Admin | `admin@codealpha.com` | `admin123` |
+| Customer | `customer@codealpha.com` | `customer123` |
 
-After the server is running and Atlas is connected, seed demo accounts and a sample product catalog:
+These accounts are for local demonstration only. Change or remove the sample credentials before using a persistent database or deploying the application.
 
-```bash
-# From the server/ directory
-npm run seed
-```
+## Main API routes
 
-This creates the following demo accounts **only if they do not already exist**:
+| Area | Routes |
+|---|---|
+| Authentication | `/api/auth/register`, `/api/auth/login`, `/api/auth/me` |
+| Products | `/api/products`, `/api/products/categories`, `/api/products/:id` |
+| Orders | `/api/orders`, `/api/orders/myorders`, `/api/orders/:id` |
 
-| Role | Email | Notes |
-|:---|:---|:---|
-| Admin | `admin@codealpha.com` | Set your own password in `seed.js` before first run |
-| Customer | `customer@codealpha.com` | Set your own password in `seed.js` before first run |
+The server also provides `GET /api/health` for checking the API and database connection status.
 
-> **Security note:** The seed script uses placeholder passwords. Set strong passwords before deploying.
+## Notes
 
----
-
-### 5. Install & Start the Frontend
-
-Open a **new terminal**:
-
-```bash
-cd client
-npm install
-npm run dev        # Development server on http://localhost:3000
-```
-
-The Vite dev server proxies all `/api/*` requests to `http://localhost:5000`.
-
----
-
-### 6. Production Frontend Build
-
-```bash
-cd client
-npm run build      # Outputs optimized static files to client/dist/
-```
-
----
-
-## 📡 REST API Reference
-
-### Health Check
-
-| Method | Endpoint | Description |
-|:---|:---|:---|
-| `GET` | `/api/health` | Server and database connection status |
-
-### Authentication (`/api/auth`)
-
-| Method | Endpoint | Auth | Description |
-|:---|:---|:---|:---|
-| `POST` | `/api/auth/register` | Public | Register a new customer account |
-| `POST` | `/api/auth/login` | Public | Authenticate and receive JWT |
-| `GET` | `/api/auth/me` | 🔒 Protected | Get authenticated user profile |
-| `GET` | `/api/auth/users` | 🔑 Admin | List all registered users |
-
-### Products (`/api/products`)
-
-| Method | Endpoint | Auth | Description |
-|:---|:---|:---|:---|
-| `GET` | `/api/products` | Public | Get all products (supports `?keyword=`, `?category=`, `?featured=true`) |
-| `GET` | `/api/products/categories` | Public | Get distinct category list |
-| `GET` | `/api/products/:id` | Public | Get single product details |
-| `POST` | `/api/products` | 🔑 Admin | Create a new product |
-| `PUT` | `/api/products/:id` | 🔑 Admin | Update a product |
-| `DELETE` | `/api/products/:id` | 🔑 Admin | Delete a product |
-
-### Orders (`/api/orders`)
-
-| Method | Endpoint | Auth | Description |
-|:---|:---|:---|:---|
-| `POST` | `/api/orders` | 🔒 Protected | Submit a new order (decrements stock automatically) |
-| `GET` | `/api/orders/myorders` | 🔒 Protected | Get authenticated customer's order history |
-| `GET` | `/api/orders/:id` | 🔒 Protected | Get order details (owner or admin only) |
-| `GET` | `/api/orders` | 🔑 Admin | Get all orders |
-| `PUT` | `/api/orders/:id/status` | 🔑 Admin | Update order status |
-
----
-
-## 🧪 Testing the Application
-
-### Quick Test via API (Node.js)
-
-```js
-// Register a new customer
-const http = require("http");
-const data = JSON.stringify({
-  name: "Test User",
-  email: "test@example.com",
-  password: "SecurePass123!"
-});
-const req = http.request("http://localhost:5000/api/auth/register", {
-  method: "POST",
-  headers: { "Content-Type": "application/json", "Content-Length": Buffer.byteLength(data) }
-}, (res) => { /* handle response */ });
-req.write(data);
-req.end();
-```
-
-### Verifying Atlas Persistence
-
-1. Register a user → note the `_id` returned.
-2. Stop the backend (`Ctrl+C`).
-3. Restart the backend (`npm start`).
-4. Log in with the same credentials — a JWT should be issued from the persisted record.
-
-If the backend cannot connect to Atlas, all data routes return **HTTP 503** immediately. No silent fallback to memory occurs.
-
----
-
-## 🔐 Security Checklist
-
-- [x] Passwords hashed with bcryptjs (salt rounds: 12)
-- [x] JWT tokens expire (30 days) and are verified on every protected request
-- [x] `server/.env` is in `.gitignore` — never committed
-- [x] No credentials or connection strings in source code
-- [x] Admin-only routes protected by role-based middleware
-- [x] Database connection fails loudly (HTTP 503) when Atlas is unreachable
-
----
-
-## 👨‍💻 Author
+- Product, user, and order changes made in in-memory demo mode are not saved after a server restart.
+- Payment options are shown as part of the checkout interface; no real payment is processed.
+- Keep the `.env` file private and do not commit it to Git.
 
 **CodeAlpha Full Stack Development Internship — November 2026**
-
----
-
-## 📄 License
-
-This project was developed for educational purposes as part of the CodeAlpha Internship programme.
